@@ -57,7 +57,7 @@ jobs:
         values: [1,3,5,10]
     objective:
       goal: maximize
-      primary_metric: Accuracy
+      primary_metric: accuracy
     limits:
       max_total_trials: 20
       max_concurrent_trials: 10
