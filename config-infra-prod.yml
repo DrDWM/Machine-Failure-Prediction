@@ -19,4 +19,4 @@ variables:
 
   # For pipeline reference
   resource_group: default_resource_group
-  aml_workspace: MooreML_Workspace
+  aml_workspace: DrMooreML_Workspace
