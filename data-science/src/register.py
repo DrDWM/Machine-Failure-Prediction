@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument('--model_name', type=str, help='Name under which model will be registered')
     parser.add_argument('--model_path', type=str, help='Model directory')
     parser.add_argument("--model_info_output_path", type=str, help="Path to write model info JSON")
-    args, _ = parser.parse_known_args()
+    args = parser.parse_args()
     print(f'Arguments: {args}')
 
     return args
