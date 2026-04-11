@@ -70,15 +70,12 @@ jobs:
     command: >-
       python register.py 
       --model_name ${{inputs.model_name}} 
-      --model_path ${{inputs.model_path}} 
+      --sweep_job_id ${{inputs.sweep_job_id}} 
       --model_info_output_path ${{outputs.model_info_output_path}}
     environment: azureml:machine-failure-train-env@latest
     inputs:
       model_name: "machine_failure_prediction_model"
-      model_path: 
-        type: mlflow_model        # Explicitly define as an mlflow_model
-        mode: download          # Or 'ro_mount' to avoid string resolution issues
-        path: ${{parent.jobs.sweep_step.outputs.model_output}}
+      # Pass the sweep job's name/ID directly as a string
+      sweep_job_id: ${{parent.jobs.sweep_step.name}}
     outputs:
       model_info_output_path: ${{parent.outputs.model_info_output_path}}
-
