@@ -75,6 +75,8 @@ jobs:
     environment: azureml:machine-failure-train-env@latest
     inputs:
       model_name: "machine_failure_prediction_model"
-      model_path: ${{parent.jobs.sweep_step.outputs.model_output}}
+      model_path: ${{parent.jobs.sweep_step.outputs.best_model_output}}
+    depends_on:
+    - sweep_step
     outputs:
       model_info_output_path: ${{parent.outputs.model_info_output_path}}
