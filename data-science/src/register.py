@@ -22,6 +22,7 @@ def parse_args():
 
     return args
 
+""" older version of main(args)
 def main(args):
     '''Loads the best-trained model from the sweep job and registers it'''
 
@@ -45,6 +46,36 @@ def main(args):
     output_path = os.path.join(args.model_info_output_path, "model_info.json")
     with open(output_path, "w") as of:
         json.dump(model_info, of)
+"""
+
+def main(args):
+    print(f"Registering model from path: {args.model_path}")
+
+    # Register the model directly from the path provided by the sweep step
+    # This avoids loading the model into memory and re-logging it
+    model_uri = f"runs:/{mlflow.active_run().info.run_id}/{args.model_name}"
+    
+    # Use mlflow.register_model with the path to the existing MLflow model
+    # The 'model_path' from the sweep step is already a valid MLflow model directory
+    mlflow_model = mlflow.register_model(
+        model_uri=f"file://{os.path.abspath(args.model_path)}", 
+        name=args.model_name
+    )
+    
+    model_version = mlflow_model.version
+    print(f"Registered version: {model_version}")
+
+    # Write model info
+    print("Writing JSON")
+    model_info = {"id": f"{args.model_name}:{model_version}"}
+    
+    # Ensure the output directory exists
+    os.makedirs(args.model_info_output_path, exist_ok=True)
+    output_path = os.path.join(args.model_info_output_path, "model_info.json")
+    
+    with open(output_path, "w") as of:
+        json.dump(model_info, of)
+
 
 if __name__ == "__main__":
     
