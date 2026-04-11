@@ -75,7 +75,7 @@ jobs:
     environment: azureml:machine-failure-train-env@latest
     inputs:
       model_name: "machine_failure_prediction_model"
-      # Pass the sweep job's name/ID directly as a string
+      # This is a string injection, not a data binding
       sweep_job_id: ${{parent.jobs.sweep_step.name}}
     outputs:
       model_info_output_path: ${{parent.outputs.model_info_output_path}}
