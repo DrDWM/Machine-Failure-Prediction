@@ -51,30 +51,28 @@ def main(args):
 def main(args):
     print(f"Registering model from path: {args.model_path}")
 
-    # Register the model directly from the path provided by the sweep step
-    # This avoids loading the model into memory and re-logging it
-    model_uri = f"runs:/{mlflow.active_run().info.run_id}/{args.model_name}"
-    
-    # Use mlflow.register_model with the path to the existing MLflow model
-    # The 'model_path' from the sweep step is already a valid MLflow model directory
-    mlflow_model = mlflow.register_model(
-        model_uri=f"file://{os.path.abspath(args.model_path)}", 
-        name=args.model_name
+    # 1. Log the model folder from the local disk into the CURRENT run
+    # This makes the model visible in the 'Outputs + logs' tab of the register_model job
+    mlflow.sklearn.log_model(
+        sk_model=mlflow.sklearn.load_model(args.model_path), 
+        artifact_path=args.model_name
     )
+
+    # 2. Register it using the URI of the model we just logged
+    run_id = mlflow.active_run().info.run_id
+    model_uri = f"runs:/{run_id}/{args.model_name}"
+    
+    print(f"Registering model version from URI: {model_uri}")
+    mlflow_model = mlflow.register_model(model_uri=model_uri, name=args.model_name)
     
     model_version = mlflow_model.version
     print(f"Registered version: {model_version}")
 
-    # Write model info
-    print("Writing JSON")
-    model_info = {"id": f"{args.model_name}:{model_version}"}
-    
-    # Ensure the output directory exists
+    # 3. Write model info JSON
     os.makedirs(args.model_info_output_path, exist_ok=True)
     output_path = os.path.join(args.model_info_output_path, "model_info.json")
-    
     with open(output_path, "w") as of:
-        json.dump(model_info, of)
+        json.dump({"id": f"{args.model_name}:{model_version}"}, of)
 
 
 if __name__ == "__main__":
