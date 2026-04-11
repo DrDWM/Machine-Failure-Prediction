@@ -75,6 +75,10 @@ jobs:
     environment: azureml:machine-failure-train-env@latest
     inputs:
       model_name: "machine_failure_prediction_model"
-      model_path: ${{parent.jobs.sweep_step.outputs.model_output}}
+      model_path: 
+        type: uri_folder        # Explicitly define as a folder
+        mode: download          # Or 'ro_mount' to avoid string resolution issues
+        path: ${{parent.jobs.sweep_step.outputs.model_output}}
     outputs:
       model_info_output_path: ${{parent.outputs.model_info_output_path}}
+
