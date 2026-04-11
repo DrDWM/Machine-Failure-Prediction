@@ -70,12 +70,11 @@ jobs:
     command: >-
       python register.py 
       --model_name ${{inputs.model_name}} 
-      --sweep_job_id ${{inputs.sweep_job_id}} 
+      --model_path ${{inputs.model_path}} 
       --model_info_output_path ${{outputs.model_info_output_path}}
     environment: azureml:machine-failure-train-env@latest
     inputs:
       model_name: "machine_failure_prediction_model"
-      # This is a string injection, not a data binding
-      sweep_job_id: ${{parent.jobs.sweep_step.name}}
+      model_path: ${{parent.jobs.sweep_step.outputs.model_output}}
     outputs:
       model_info_output_path: ${{parent.outputs.model_info_output_path}}
