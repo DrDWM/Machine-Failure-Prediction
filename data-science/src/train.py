@@ -61,8 +61,9 @@ def main(args):
     mlflow.log_metric("accuracy", float(accuracy))
 
     
-    # log the model 
+    # log and save the model 
     mlflow.sklearn.log_model(model, args.model_output)
+    mlflow.sklearn.save_model(sk_model=model, path=args.model_output)
 
 if __name__ == "__main__":
     
