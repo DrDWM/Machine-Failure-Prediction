@@ -60,8 +60,23 @@ def main(args):
     # Logging the accuracy score as a metric
     mlflow.log_metric("Accuracy", float(accuracy))
 
+    
+    # get the name of the child process having the best MSE 
+    # save the model to a local directory, then save it to the model output path
+    from distutils.dir_util import copy_tree
+    import os
+
+    local_model_dir = "model"
+    os.makedirs(local_model_dir, exist_ok=True)
+
     # Save the model
-    mlflow.sklearn.save_model(sk_model=model, path=args.model_output)
+    mlflow.sklearn.save_model(sk_model=model, path=local_model_dir)
+
+    # copy subdirectory example
+    from_directory = local_model_dir
+    to_directory = args.model_output
+
+    copy_tree(from_directory, to_directory)
 
 if __name__ == "__main__":
     
