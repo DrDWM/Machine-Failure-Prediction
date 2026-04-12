@@ -71,7 +71,7 @@ def main(args):
 
     # Save and log the model
     mlflow.sklearn.log_model(model, local_model_dir)
-    mlflow.sklearn.save_model(sk_model=model, path=local_model_dir)
+    # mlflow.sklearn.save_model(sk_model=model, path=local_model_dir)
 
     # copy subdirectory example
     from_directory = local_model_dir
