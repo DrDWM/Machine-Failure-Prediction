@@ -58,7 +58,7 @@ def main(args):
     accuracy = accuracy_score(y_test, yhat_test)
     print(f'Accuracy of Decision Tree classifier on test set: {accuracy:.2f}')
     # Logging the accuracy score as a metric
-    mlflow.log_metric("Accuracy", float(accuracy))
+    mlflow.log_metric("accuracy", float(accuracy))
 
     
     # log the model 
@@ -66,7 +66,7 @@ def main(args):
 
 if __name__ == "__main__":
     
-    mlflow.start_run()
+    
 
     # Parse Arguments
     args = parse_args()
@@ -82,6 +82,5 @@ if __name__ == "__main__":
     for line in lines:
         print(line)
 
-    main(args)
-
-    mlflow.end_run()
+    with mlflow.start_run():
+        main(args)
