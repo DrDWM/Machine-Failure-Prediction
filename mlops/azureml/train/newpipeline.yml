@@ -46,6 +46,7 @@ jobs:
     outputs:
       model_output:
         type: mlflow_model
+        mode: rw_mount
     sampling_algorithm: random
     trial: ./train.yml  # Refers to a separate command component
     search_space:
